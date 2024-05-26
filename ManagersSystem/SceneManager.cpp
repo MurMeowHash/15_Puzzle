@@ -42,4 +42,5 @@ std::shared_ptr<GameSceneView> SceneManager::getGameScene() const {
 void SceneManager::clearScenes() {
     menuScene->dispose();
     gameScene->dispose();
+    setScene(nullptr);
 }
