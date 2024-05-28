@@ -14,12 +14,9 @@ QString BoardView::formTilePath(int num) {
     return SPRITES_PATH + TILE_PREFIX + QString::number(num) + SPRITE_EXTENSION;
 }
 
-void BoardView::setUpInitialCoords(qreal &currentXCoord, qreal &currentYCoord,
-                                   const std::shared_ptr<QGraphicsScene> &currentScene, int boardLength) {
-    qreal targetSceneWidth = currentScene->width();
-    qreal targetSceneHeight = currentScene->height();
-    currentXCoord = targetSceneWidth / 2. - boardLength / 2. * TILE_WIDTH - (boardLength - 1.) / 2. * PADDING;
-    currentYCoord = targetSceneHeight / 2. - boardLength / 2. * TILE_HEIGHT - (boardLength - 1.) / 2. * PADDING;
+void BoardView::setUpInitialCoords(qreal &currentXCoord, qreal &currentYCoord, const QPoint &relativePoint, int boardLength) {
+    currentXCoord = relativePoint.x() - boardLength / 2. * TILE_WIDTH - (boardLength - 1.) / 2. * PADDING;
+    currentYCoord = relativePoint.y() - boardLength / 2. * TILE_HEIGHT - (boardLength - 1.) / 2. * PADDING;
 }
 
 void BoardView::drawTiles(const BoardModel &sourceBoard) {
@@ -29,13 +26,19 @@ void BoardView::drawTiles(const BoardModel &sourceBoard) {
     Point currentPos;
     std::shared_ptr<QGraphicsScene> gameScene = Managers::getScene()->getGameScene();
     qreal currentXCoord, currentYCoord, initialXCoord;
-    setUpInitialCoords(currentXCoord, currentYCoord, gameScene, boardLength);
+    setUpInitialCoords(currentXCoord, currentYCoord, Scene::COORDINATES_CENTER, boardLength);
     initialXCoord = currentXCoord;
+    QPointF leftBorderCoords, rightBorderCoords;
     for(int i = 0, currentTileIndex = 0; i < elementsCount; i++) {
         if(i % boardLength == 0
         && i != 0) {
             currentXCoord = initialXCoord;
             currentYCoord += TILE_HEIGHT + PADDING;
+        }
+        if(i == 0) {
+            leftBorderCoords = {currentXCoord, currentYCoord};
+        } else if(i == elementsCount - 1) {
+            rightBorderCoords = {currentXCoord + TILE_WIDTH, currentYCoord};
         }
         Algorithms::transformToMatrixIndex(i, currentPos, boardLength);
         int currentElement = sourceBoard[currentPos.x][currentPos.y];
@@ -49,6 +52,7 @@ void BoardView::drawTiles(const BoardModel &sourceBoard) {
         }
         currentXCoord += TILE_WIDTH + PADDING;
     }
+    emit boardDrawn(leftBorderCoords, rightBorderCoords);
 }
 
 void BoardView::setFocus(const Point &targetPosition) {
@@ -72,9 +76,8 @@ void BoardView::onUpdateBoard(const Point &targetPosition, const Point &freePosi
 
 void BoardView::resetTiles(const BoardModel &sourceBoard) {
     int boardLength = sourceBoard.getLength();
-    std::shared_ptr<QGraphicsScene> gameScene = Managers::getScene()->getGameScene();
     qreal currentXCoord, currentYCoord, initialXCoord;
-    setUpInitialCoords(currentXCoord, currentYCoord, gameScene, boardLength);
+    setUpInitialCoords(currentXCoord, currentYCoord, Scene::COORDINATES_CENTER, boardLength);
     initialXCoord = currentXCoord;
     for(int i = 0; i < boardLength; i++) {
         for(int j = 0; j < boardLength; j++) {

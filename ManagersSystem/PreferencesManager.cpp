@@ -2,8 +2,7 @@
 
 void PreferencesManager::startUp() {
     notifyManagerStarting("Preferences");
-    resourcesDemand = ResourcesOption::LowDemand;
-    maxSolutionTime = DEFAULT_SOLUTION_TIME * CONVERSION_FACTOR;
+    updateData(ResourcesOption::LowDemand, DEFAULT_SOLUTION_TIME * CONVERSION_FACTOR);
 }
 
 void PreferencesManager::setResourcesOption(const ResourcesOption &targetDemand) {
@@ -31,4 +30,9 @@ qint64 PreferencesManager::getMaxSolutionTimeSec() const {
 
 qint64 PreferencesManager::getMaxSolutionTimeMSec() const {
     return maxSolutionTime;
+}
+
+void PreferencesManager::updateData(const ResourcesOption &targetDemand, qint64 targetMaxSolutionTime) {
+    resourcesDemand = targetDemand;
+    setMaxSolutionTime(targetMaxSolutionTime);
 }

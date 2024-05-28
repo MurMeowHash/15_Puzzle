@@ -16,13 +16,11 @@ void MenuController::loadGame() {
     if(SavingsManager::savedStateExist()) {
         emit passControl(this, GameController::LOAD_STATE_FLAG);
     } else {
-        //TODO: message box
-        std::cout<<"No savings\n";
+        Scene::raiseMessageBox("No savings");
     }
 }
 
 void MenuController::exitGame() {
-    //TODO: save preferences
     QApplication::quit();
 }
 
@@ -34,22 +32,22 @@ void MenuController::initializeController(const QString &flag) {
 
 void MenuController::setUpConnections() {
     std::shared_ptr<MenuSceneView> menuScene = Managers::getScene()->getMenuScene();
-    GraphicsWidget<QPushButton> *playButton = menuScene->getPlayButton();
-    GraphicsWidget<QPushButton> *loadGameButton = menuScene->getLoadGameButton();
-    GraphicsWidget<QPushButton> *quitButton = menuScene->getQuitButton();
-    GraphicsWidget<QComboBox> *resDemandDropDown = menuScene->getResourcesDemandDropDown();
-    GraphicsWidget<QLineEdit> *timeSolvingInputLine = menuScene->getTimeSolvingInputLine();
-    connections->push_back(connect(playButton->widgetPart, &QPushButton::clicked, this,
+    QPushButton *playButton = menuScene->getPlayButton();
+    QPushButton *loadGameButton = menuScene->getLoadGameButton();
+    QPushButton *quitButton = menuScene->getQuitButton();
+    QComboBox *resDemandDropDown = menuScene->getResourcesDemandDropDown();
+    QLineEdit *timeSolvingInputLine = menuScene->getTimeSolvingInputLine();
+    connections->push_back(connect(playButton, &QPushButton::clicked, this,
                                    &MenuController::startGame));
-    connections->push_back(connect(loadGameButton->widgetPart, &QPushButton::clicked, this,
+    connections->push_back(connect(loadGameButton, &QPushButton::clicked, this,
                                    &MenuController::loadGame));
-    connections->push_back(connect(quitButton->widgetPart, &QPushButton::clicked, this,
+    connections->push_back(connect(quitButton, &QPushButton::clicked, this,
                                    &MenuController::exitGame));
-    connections->push_back(connect(resDemandDropDown->widgetPart, &QComboBox::currentIndexChanged, this,
+    connections->push_back(connect(resDemandDropDown, &QComboBox::currentIndexChanged, this,
                                    &MenuController::setResourcesDemand));
-    connections->push_back(connect(timeSolvingInputLine->widgetPart, &QLineEdit::editingFinished, this,
+    connections->push_back(connect(timeSolvingInputLine, &QLineEdit::editingFinished, this,
                                    &MenuController::setMaxTimeSolving));
-    connections->push_back(connect(this, &MenuController::updateSolvingTimeLine, timeSolvingInputLine->widgetPart,
+    connections->push_back(connect(this, &MenuController::updateSolvingTimeLine, timeSolvingInputLine,
                                    &QLineEdit::setText));
 }
 
@@ -71,9 +69,9 @@ void MenuController::setResourcesDemand(int index) {
 }
 
 void MenuController::setMaxTimeSolving() {
-    GraphicsWidget<QLineEdit> *timeSolvingInputLine = Managers::getScene()->getMenuScene()->getTimeSolvingInputLine();
+    QLineEdit *timeSolvingInputLine = Managers::getScene()->getMenuScene()->getTimeSolvingInputLine();
     bool correctInput;
-    QString inputTime = timeSolvingInputLine->widgetPart->text();
+    QString inputTime = timeSolvingInputLine->text();
     qint64 targetMaxTime = inputTime.toLongLong(&correctInput);
     int newTimeSolving = static_cast<int>(Managers::getPreferences()->getMaxSolutionTimeSec());
     if(correctInput) {

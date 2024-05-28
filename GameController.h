@@ -33,6 +33,7 @@ public slots:
     void restartGame();
     void saveGame();
     void returnToMenu();
+    void connectControlButtons();
     void initializeController(const QString &flag) override;
     signals:
     void gameBoardSetUp(const BoardModel &referenceBoard) const;
@@ -42,4 +43,5 @@ public slots:
     void showResultsPopup(const QString &context) const;
     void redrawBoard(const BoardModel &sourceBoard);
     void processingRestart();
+    void solutionFound();
 };

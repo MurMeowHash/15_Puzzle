@@ -22,8 +22,7 @@ void GameController::initializeController(const QString &flag) {
         try {
             savedBoard = SavingsManager::getSavedState();
         } catch(FileException &ex) {
-//            TODO: message box
-            std::cout<<ex.what();
+            Scene::raiseMessageBox(ex.what() + QString{" <New game will be started>"});
         }
     }
     gameBoard = savedBoard == nullptr ? new BoardModel{PUZZLE_TABLE_LENGTH} : savedBoard;
@@ -85,21 +84,18 @@ void GameController::solveState() {
 void GameController::setUpConnections() {
     std::shared_ptr<GameSceneView> gameScene = Managers::getScene()->getGameScene();
     BoardView *boardView = gameScene->getBoardView();
-    GraphicsWidget<QPushButton> *solveButton = gameScene->getSolveButton();
-    GraphicsWidget<QPushButton> *proceedButton = gameScene->getProceedButton();
-    GraphicsWidget<QPushButton> *restartButton = gameScene->getRestartButton();
-    GraphicsWidget<QPushButton> *saveButton = gameScene->getSaveButton();
-    GraphicsWidget<QPushButton> *menuButton = gameScene->getMenuButton();
+    QPushButton *restartButton = gameScene->getRestartButton();
+    QPushButton *menuButton = gameScene->getMenuButton();
+    QPushButton *restartWinButton = gameScene->getRestartWinButton();
+    QPushButton *menuWinButton = gameScene->getMenuWinButton();
+    connections->push_back(connect(gameScene.get(), &GameSceneView::controlButtonsCreated, this,
+                                   &GameController::connectControlButtons));
     connections->push_back(connect(this, &GameController::gameBoardSetUp, boardView,
                                   &BoardView::drawTiles));
     connections->push_back(connect(boardView, &BoardView::requestMove, this,
                                   &GameController::moveTile));
     connections->push_back(connect(this, &GameController::updateBoard, boardView,
                                   &BoardView::onUpdateBoard));
-    connections->push_back(connect(solveButton->widgetPart, &QPushButton::clicked, this,
-                                  &GameController::solveState));
-    connections->push_back(connect(proceedButton->widgetPart, &QPushButton::clicked, this,
-                                  &GameController::showNextMove));
     connections->push_back(connect(this, &GameController::updateFocusInfo, boardView,
                                   &BoardView::setFocus));
     connections->push_back(connect(this, &GameController::solvingStarted, gameScene.get(),
@@ -108,18 +104,24 @@ void GameController::setUpConnections() {
                                   &GameSceneView::disableLoadingScreen));
     connections->push_back(connect(asyncLoadingHandler, &QFutureWatcher<bool>::finished, this,
                                   &GameController::handleSolvingResult));
+    connections->push_back(connect(this, &GameController::solutionFound, gameScene.get(),
+                                   &GameSceneView::blockSaveButton));
+    connections->push_back(connect(this, &GameController::processingRestart, gameScene.get(),
+                                   &GameSceneView::unblockSaveButton));
     connections->push_back(connect(this, &GameController::showResultsPopup, gameScene.get(),
                                   &GameSceneView::drawResultsPopup));
     connections->push_back(connect(this, &GameController::redrawBoard, boardView,
                                   &BoardView::resetTiles));
-    connections->push_back(connect(restartButton->widgetPart, &QPushButton::clicked, this,
-                                  &GameController::restartGame));
     connections->push_back(connect(this, &GameController::processingRestart, gameScene.get(),
                                   &GameSceneView::hideWinPopup));
-    connections->push_back(connect(saveButton->widgetPart, &QPushButton::clicked, this,
-                                  &GameController::saveGame));
-    connections->push_back(connect(menuButton->widgetPart, &QPushButton::clicked, this,
+    connections->push_back(connect(restartButton, &QPushButton::clicked, this,
+                                   &GameController::restartGame));
+    connections->push_back(connect(menuButton, &QPushButton::clicked, this,
                                   &GameController::returnToMenu));
+    connections->push_back(connect(restartWinButton, &QPushButton::clicked, this,
+                                   &GameController::restartGame));
+    connections->push_back(connect(menuWinButton, &QPushButton::clicked, this,
+                                   &GameController::returnToMenu));
 }
 
 void GameController::destroyConnections() {
@@ -148,6 +150,7 @@ void GameController::handleSolvingResult() {
     QString context;
     if(asyncResult->result()) {
         context = "Solution was successfully found";
+        emit solutionFound();
     } else {
         context = "Solution was not found";
         Managers::getProgress()->enableSolverUsage(false);
@@ -165,6 +168,9 @@ void GameController::restartGame() {
 }
 
 void GameController::saveGame() {
+    if(Managers::getProgress()->getSolverUsage()) {
+        return;
+    }
     handleNullReferences("No game to save", 1, gameBoard);
     SavingsManager::saveState(*gameBoard);
 }
@@ -182,4 +188,17 @@ void GameController::dispose() {
 
 void GameController::returnToMenu() {
     emit passControl(this, nullptr);
+}
+
+void GameController::connectControlButtons() {
+    std::shared_ptr<GameSceneView> gameScene = Managers::getScene()->getGameScene();
+    GraphicsWidget<QPushButton> *solveButton = gameScene->getSolveButton();
+    GraphicsWidget<QPushButton> *proceedButton = gameScene->getProceedButton();
+    GraphicsWidget<QPushButton> *saveButton = gameScene->getSaveButton();
+    connections->push_back(connect(solveButton->widgetPart, &QPushButton::clicked, this,
+                                   &GameController::solveState));
+    connections->push_back(connect(proceedButton->widgetPart, &QPushButton::clicked, this,
+                                   &GameController::showNextMove));
+    connections->push_back(connect(saveButton->widgetPart, &QPushButton::clicked, this,
+                                   &GameController::saveGame));
 }

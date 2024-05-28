@@ -5,8 +5,7 @@
 void ProgressManager::startUp() {
     notifyManagerStarting("Progress");
     wipeProgress();
-    connect(this, &ProgressManager::gameWin, Managers::getScene()->getGameScene().get(),
-            &GameSceneView::showWinPopup);
+    bestScore = INT_MAX;
 }
 
 void ProgressManager::increaseProgress() {
@@ -16,7 +15,11 @@ void ProgressManager::increaseProgress() {
     }
     if(checkWin()) {
         stopTrackingTime();
-        SavingsManager::saveBestScore();
+        if(SavingsManager::saveBestScore()) {
+            std::shared_ptr<ProgressManager> progressManager = Managers::getProgress();
+            progressManager->setBestScore(progressManager->getTimeSolving());
+            emit bestScoreUpdated();
+        }
         emit gameWin(QString::number(timeSolving));
     }
 }
@@ -82,4 +85,14 @@ void ProgressManager::setSolvingTime(qint64 targetTime) {
     if(targetTime > 0) {
         timeSolving = targetTime;
     }
+}
+
+void ProgressManager::setBestScore(qint64 targetBestScore) {
+    if(targetBestScore > 0) {
+        bestScore = targetBestScore;
+    }
+}
+
+qint64 ProgressManager::getBestScore() const {
+    return bestScore;
 }

@@ -16,6 +16,7 @@ private:
     QElapsedTimer currentTimer;
     qint64 timeSolving;
     qint64 movesCount;
+    qint64 bestScore;
 public:
     void increaseProgress();
     void decreaseProgress();
@@ -26,12 +27,15 @@ public:
     qint64 stopTrackingTime();
     qint64 increaseMovesCount();
     void setSolvingTime(qint64 targetTime);
+    void setBestScore(qint64 targetBestScore);
     void wipeProgress();
     NODISCARD qint64 getMovesCount() const;
     NODISCARD qint64 getTimeSolving() const;
+    NODISCARD qint64 getBestScore() const;
     NODISCARD bool getSolverUsage() const;
     NODISCARD bool checkWin() const;
     void startUp() override;
     signals:
     void gameWin(const QString &timeData = nullptr);
+    void bestScoreUpdated();
 };

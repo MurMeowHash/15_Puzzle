@@ -1,5 +1,4 @@
 #include <QApplication>
-#include <QMainWindow>
 #include "GameController.h"
 #include "MenuController.h"
 #include "ManagersSystem/Managers.h"
@@ -8,13 +7,13 @@ void clearResources(AbstractController &menuController, AbstractController &game
 
 int main(int argc, char **argv) {
     QApplication gameApp{argc, argv};
-    QMainWindow game;
     Managers::startManagers();
     GameController gameController;
     MenuController menuController;
     AbstractController::interconnectControllers(&menuController, &gameController);
     menuController.initializeController(nullptr);
     int execCode = QApplication::exec();
+    SavingsManager::savePreferences();
     clearResources(menuController, gameController);
     return execCode;
 }

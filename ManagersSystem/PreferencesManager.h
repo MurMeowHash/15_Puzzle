@@ -14,6 +14,7 @@ public:
     static constexpr qint64 UPPER_BOUND_SOLUTION_TIME = 120;
     static constexpr qint64 DEFAULT_SOLUTION_TIME = 10;
     void setResourcesOption(const ResourcesOption &targetAlgorithm);
+    void updateData(const ResourcesOption &targetDemand, qint64 targetMaxSolutionTime);
     NODISCARD ResourcesOption getResourcesDemand() const;
     void setMaxSolutionTime(qint64 targetTime);
     NODISCARD qint64 getMaxSolutionTimeSec() const;

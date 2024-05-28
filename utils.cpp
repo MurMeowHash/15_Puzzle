@@ -19,14 +19,14 @@ void handleNullReferences(const char *message, int count, ...) {
     va_end(argList);
 }
 
-void checkIOCorruptions(int actualElemCount, int expectedElemCount) {
+void checkIOCorruptions(int actualElemCount, int expectedElemCount, const std::string &msg) {
     if(actualElemCount != expectedElemCount) {
-        throw FileException{"Unexpected number of elements was processed", std::to_string(actualElemCount)};
+        throw FileException{msg, "Unexpected number of elements was processed"};
     }
 }
 
-void checkOpeningCorruptions(FILE *targetStream, const std::string &fileName) {
+void checkOpeningCorruptions(FILE *targetStream, const std::string &msg) {
     if(targetStream == nullptr) {
-        throw FileException{"Unable to open file", fileName};
+        throw FileException{msg, "Unable to open file"};
     }
 }
