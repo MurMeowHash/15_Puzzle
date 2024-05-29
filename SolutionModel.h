@@ -24,5 +24,6 @@ public:
     void clearPath();
     NODISCARD bool lastMove() const;
     BoardModel *getNextMove();
+    NODISCARD int getSolutionLength() const;
     ~SolutionModel();
 };

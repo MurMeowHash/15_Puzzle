@@ -13,17 +13,6 @@ const QString GameSceneView::BLOCKED_BUTTON_ICON_PATH{Scene::SPRITES_DIRECTORY +
 const QString GameSceneView::BEST_SCORE_ICON_PATH{Scene::SPRITES_DIRECTORY + QString{"best_score.png"}};
 const QString GameSceneView::INITIAL_WIN_LABEL_TEXT{"You won!"};
 
-GameSceneView::GameSceneView() : board{nullptr}, solveButton{nullptr}, proceedButton{nullptr}, saveButton{nullptr},
-    restartButton{nullptr}, menuButton{nullptr}, restartButtonLayout{nullptr}, menuButtonLayout{nullptr},
-    managementWidgetsLayout{nullptr}, loadingBackground{nullptr}, loadingMovieVLayout{nullptr}, loadingMovieHLayout{nullptr},
-    loadingMovie{nullptr}, loadingScreenLabel{nullptr}, popupSearchResults{nullptr}, searchResultsLabel{nullptr},
-    acknowledgmentButton{nullptr}, acknowledgmentLayout{nullptr}, popupSearchLayout{nullptr}, popupGameWin{nullptr},
-    winLabel{nullptr}, winLabelLayout{nullptr}, winBackground{nullptr}, restartWinButton{nullptr}, menuWinButton{nullptr},
-    managementWinButtonsLayout{nullptr}, winLayout{nullptr}, bestScoreText{nullptr}, bestScoreIcon{nullptr},
-    bestScoreLayout{nullptr}, connections{nullptr} {
-
-}
-
 void GameSceneView::initializeScene() {
     board = new BoardView{this};
     setUpCanvas();
@@ -113,11 +102,12 @@ void GameSceneView::setUpPopupSearchResults() {
     setUpWindow(popupSearchResults, "border-image: url(" + POPUP_RES_ICON_PATH + ");",
                 POPUP_SEARCH_RES_SIZE, targetPos, painterWidget.get());
     setUpLabel(searchResultsLabel, nullptr, 24);
+    setUpSingleLayout(searchResultsLabelLayout, searchResultsLabel, Qt::AlignCenter);
     setUpWidgetButton(acknowledgmentButton, REGULAR_BUTTON_ICON_PATH, "Got it", 22,
                       REGULAR_BUTTON_SIZE);
     setUpSingleLayout(acknowledgmentLayout, acknowledgmentButton, Qt::AlignCenter);
     popupSearchLayout = new QVBoxLayout{popupSearchResults};
-    popupSearchLayout->addWidget(searchResultsLabel);
+    popupSearchLayout->addLayout(searchResultsLabelLayout);
     popupSearchLayout->addSpacing(SPACE_BETWEEN_RES_WIDGETS);
     popupSearchLayout->addLayout(acknowledgmentLayout);
     popupSearchLayout->setAlignment(Qt::AlignCenter);

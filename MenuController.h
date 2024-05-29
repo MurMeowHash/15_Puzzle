@@ -8,11 +8,10 @@
 class MenuController : public AbstractController, public IConnectable {
     Q_OBJECT
 private:
-    std::list<QMetaObject::Connection> *connections;
+    std::list<QMetaObject::Connection> *connections{nullptr};
     void setUpConnections() override;
     void destroyConnections() override;
 public:
-    MenuController();
     void setResourcesDemand(int index);
     void setMaxTimeSolving();
     void dispose() override;

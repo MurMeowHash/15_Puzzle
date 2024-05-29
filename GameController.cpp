@@ -10,11 +10,6 @@
 
 const QString GameController::LOAD_STATE_FLAG{"-l"};
 
-GameController::GameController() : gameBoard{nullptr}, goalBoard{nullptr}, solver{nullptr}, asyncLoadingHandler{nullptr},
-    asyncResult{nullptr}, connections{nullptr} {
-
-}
-
 void GameController::initializeController(const QString &flag) {
     Managers::getScene()->changeScene(Scenes::Game);
     BoardModel *savedBoard{nullptr};
@@ -149,7 +144,7 @@ void GameController::handleSolvingResult() {
     handleNullReferences("No result to handle", 1, asyncResult);
     QString context;
     if(asyncResult->result()) {
-        context = "Solution was successfully found";
+        context = "Solution was successfully found.\nIt will take " + QString::number(solver->getSolutionLength()) + " moves";
         emit solutionFound();
     } else {
         context = "Solution was not found";

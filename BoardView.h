@@ -16,8 +16,8 @@ private:
     static QString formTilePath(int num);
     static void setUpInitialCoords(qreal &currentXCoord, qreal &currentYCoord, const QPoint &relativePoint, int boardLength);
 public:
-    static constexpr qreal TILE_WIDTH = 80.;
-    static constexpr qreal TILE_HEIGHT = 80.;
+    static constexpr qreal TILE_WIDTH = 128.;
+    static constexpr qreal TILE_HEIGHT = 128.;
     static constexpr qreal PADDING = 8.;
     explicit BoardView(QObject *parent);
     void requestTileMove(const Point &targetPosition, Tile *currentFocus);

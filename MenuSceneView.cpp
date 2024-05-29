@@ -5,15 +5,6 @@ const QString MenuSceneView::PREFERENCES_BACK_PATH{Scene::SPRITES_DIRECTORY + QS
 const QString MenuSceneView::BUTTON_ICON_PATH{Scene::SPRITES_DIRECTORY + QString{"button_back.png"}};
 const QString MenuSceneView::HOME_BUTTON_ICON_PATH{Scene::SPRITES_DIRECTORY + QString{"home_button_back.png"}};
 
-MenuSceneView::MenuSceneView() : playButton{nullptr}, loadGameButton{nullptr}, preferencesButton{nullptr},
-    quitButton{nullptr}, gameNameLabel{nullptr}, playButtonLayout{nullptr}, loadGameButtonLayout{nullptr},
-    preferencesButtonLayout{nullptr}, quitButtonLayout{nullptr}, gameNameLabelLayout{nullptr}, menuLayout{nullptr},
-    preferencesWindow{nullptr}, resDemandDropDown{nullptr}, preferencesItemsLayout{nullptr}, timeSolvingLabel{nullptr},
-    timeSolvingInputLine{nullptr}, timeSolvingLayout{nullptr}, demandLayout{nullptr}, demandLabel{nullptr},
-    closePreferencesButton{nullptr}, closeButtonLayout{nullptr}, connections{nullptr} {
-
-}
-
 void MenuSceneView::initializeScene() {
     QVBoxLayout *mainLayout = Managers::getScene()->getMainLayout();
     setUpMenuView();

@@ -4,10 +4,6 @@
 #include "ManagersSystem/Managers.h"
 #include "FileException.h"
 
-MenuController::MenuController() : connections{nullptr} {
-
-}
-
 void MenuController::startGame() {
     emit passControl(this);
 }

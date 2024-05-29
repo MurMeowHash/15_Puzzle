@@ -163,3 +163,7 @@ void SolutionModel::resetStep() {
 SolutionModel::~SolutionModel() {
     clearPath();
 }
+
+int SolutionModel::getSolutionLength() const {
+    return static_cast<int>(solutionPath.size());
+}

@@ -36,7 +36,8 @@ void Scene::setUpLabel(QLabel *&targetLabel, const QString &text, int fontSize) 
     targetLabel->setFont(applicationFont);
     targetLabel->setStyleSheet("background-color: transparent;"
                                "border-image: none;"
-                               "font-size: " + QString::number(fontSize) + "px");
+                               "font-size: " + QString::number(fontSize) + "px;"
+                               "text-align: center;");
 }
 
 void Scene::setUpMessageBox() {
