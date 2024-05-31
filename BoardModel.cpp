@@ -18,7 +18,6 @@ BoardModel::BoardModel(int length, const BoardGenerationOption &genOption) : boa
 BoardModel::BoardModel(const QList<QList<int>> &refBoard) : board{refBoard} {
     length = static_cast<int>(refBoard.size());
     syncFreePos();
-    //TODO: check for invalid board?
 }
 
 void BoardModel::allocateColumns() {
@@ -92,16 +91,6 @@ int BoardModel::getLength() const {
     return length;
 }
 
-void BoardModel::print() const {
-    std::cout<<"\n";
-    for(const auto &row : board) {
-        for(auto el : row) {
-            std::cout<<el<<" ";
-        }
-        std::cout<<std::endl;
-    }
-}
-
 int &BoardModel::elementAt(int arrayIndex) {
     Point position;
     Algorithms::transformToMatrixIndex(arrayIndex, position, length);
@@ -172,34 +161,6 @@ QList<BoardModel *> BoardModel::makePossibleMoves(BoardModel *exclusiveBoard) {
     return possibleConfigurations;
 }
 
-void BoardModel::temporary() {
-    board[0][0] = 1;
-    board[0][1] = 3;
-    board[0][2] = 14;
-    board[0][3] = 5;
-    board[1][0] = 12;
-    board[1][1] = 9;
-    board[1][2] = 4;
-    board[1][3] = 2;
-    board[2][0] = 15;
-    board[2][1] = 7;
-    board[2][2] = 13;
-    board[2][3] = 8;
-    board[3][0] = 0;
-    board[3][1] = 10;
-    board[3][2] = 11;
-    board[3][3] = 6;
-//    for(int i = 0; i < length; i++) {
-//        for(int j = 0; j < length; j++) {
-//            board[i][j] = i * length + j + 1;
-//        }
-//    }
-//    board[3][3] = 15;
-//    board[3][2] = 0;
-    freePos.x = 3;
-    freePos.y = 0;
-}
-
 bool BoardModel::operator<(const BoardModel &targetModel) const {
     return board < targetModel.board;
 }
@@ -255,5 +216,14 @@ void BoardModel::syncFreePos() {
                 freePos = {i, j};
             }
         }
+    }
+}
+
+void BoardModel::print() const {
+    for(int i = 0; i < length; i++) {
+        for(int j = 0; j < length; j++) {
+            std::cout<<board.at(i).at(j)<<" ";
+        }
+        std::cout<<'\n';
     }
 }

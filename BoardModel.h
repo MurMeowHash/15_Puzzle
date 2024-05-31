@@ -8,7 +8,6 @@
 
 class BoardModel : public IGenericArray<int> {
 private:
-    static constexpr int NON_EXISTENT_CELL = -1;
     static constexpr int TILE_START_POSITION = 1;
     static constexpr int FIRST_EVEN_ROW = -1;
     static constexpr int FIRST_ODD_ROW = -2;
@@ -34,9 +33,9 @@ public:
     NODISCARD int getLength() const;
     QList<BoardModel *> makePossibleMoves(BoardModel *exclusiveBoard = nullptr);
     void shuffle();
-    void print() const;
     void toGoalBoard();
     void syncFreePos();
+    UNUSED void print() const;
     NODISCARD int countRightPlacedTiles() const;
     int &elementAt(int arrayIndex) override;
     NODISCARD const int &readElement(int arrayIndex) const override;
@@ -44,6 +43,5 @@ public:
     NODISCARD IGenericArray<int> *copy() const override;
     const QList<int> &operator[](int index) const;
     bool operator<(const BoardModel &targetModel) const;
-    void temporary(); // TODO: remove
     int operator[](const Point &position) const;
 };

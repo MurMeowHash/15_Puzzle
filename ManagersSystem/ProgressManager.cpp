@@ -15,7 +15,7 @@ void ProgressManager::increaseProgress() {
     }
     if(checkWin()) {
         stopTrackingTime();
-        if(SavingsManager::saveBestScore()) {
+        if(Managers::getSavings()->saveBestScore()) {
             std::shared_ptr<ProgressManager> progressManager = Managers::getProgress();
             progressManager->setBestScore(progressManager->getTimeSolving());
             emit bestScoreUpdated();
@@ -49,10 +49,6 @@ bool ProgressManager::getSolverUsage() const {
     return solverUsage;
 }
 
-void ProgressManager::resetScore() {
-    currentProgress = 0;
-}
-
 void ProgressManager::startTrackingTime() {
     currentTimer.start();
 }
@@ -64,10 +60,6 @@ qint64 ProgressManager::stopTrackingTime() {
 
 qint64 ProgressManager::increaseMovesCount() {
     return ++movesCount;
-}
-
-qint64 ProgressManager::getMovesCount() const {
-    return movesCount;
 }
 
 qint64 ProgressManager::getTimeSolving() const {

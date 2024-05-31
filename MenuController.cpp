@@ -9,7 +9,7 @@ void MenuController::startGame() {
 }
 
 void MenuController::loadGame() {
-    if(SavingsManager::savedStateExist()) {
+    if(Managers::getSavings()->savedStateExist()) {
         emit passControl(this, GameController::LOAD_STATE_FLAG);
     } else {
         Scene::raiseMessageBox("No savings");

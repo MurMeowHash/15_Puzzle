@@ -231,7 +231,7 @@ void GameSceneView::setUpWinLabel() {
 
 void GameSceneView::setUpControlButtons(const QPointF &leftBorderCoords, const QPointF &rightBorderCoords) {
     QPushButton *widgetButtons[3];
-    QString buttonNames[] = {"Solve", "Proceed", "Save"};
+    QString buttonNames[] = {"Solve", "Advance", "Save"};
     GraphicsWidget<QPushButton> **controlButtons[] = {&solveButton, &proceedButton, &saveButton};
     int arrSize = sizeof(controlButtons) / sizeof(controlButtons[0]);
     int boardWidth = static_cast<int>(round(rightBorderCoords.x() - leftBorderCoords.x()));

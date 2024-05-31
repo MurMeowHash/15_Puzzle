@@ -9,7 +9,7 @@
 #include "GameSceneView.h"
 #include "MoveTileScoreOption.h"
 
-class GameController : public AbstractController, public IConnectable {
+class GameController : public AbstractController {
     Q_OBJECT
 private:
     BoardModel *gameBoard{nullptr};
@@ -36,7 +36,7 @@ public slots:
     void initializeController(const QString &flag) override;
     signals:
     void gameBoardSetUp(const BoardModel &referenceBoard) const;
-    void updateBoard(const Point &targetPos, const Point &freePos, int boardLength) const;
+    void updateBoard(const Point &freePos) const;
     void updateFocusInfo(const Point &targetTilePos) const;
     void solvingStarted() const;
     void showResultsPopup(const QString &context) const;

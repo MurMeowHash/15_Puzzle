@@ -63,12 +63,15 @@ void BoardView::setFocus(const Point &targetPosition) {
     }
 }
 
-void BoardView::requestTileMove(const Point &targetPosition, Tile *currentFocus) {
+void BoardView::requestTileMove(Tile *currentFocus) {
+    if(currentFocus == nullptr) {
+        return;
+    }
     currentFocusTile = currentFocus;
-    emit requestMove(targetPosition, MoveTileScoreOption::Scored);
+    emit requestMove(currentFocus->getPosition(), MoveTileScoreOption::Scored);
 }
 
-void BoardView::onUpdateBoard(const Point &targetPosition, const Point &freePosition, int boardLength) {
+void BoardView::onUpdateBoard(const Point &freePosition) {
     if(currentFocusTile != nullptr) {
         currentFocusTile->moveTile(freePosition);
     }

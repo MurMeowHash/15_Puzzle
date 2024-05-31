@@ -20,11 +20,11 @@ public:
     static constexpr qreal TILE_HEIGHT = 128.;
     static constexpr qreal PADDING = 8.;
     explicit BoardView(QObject *parent);
-    void requestTileMove(const Point &targetPosition, Tile *currentFocus);
+    void requestTileMove(Tile *currentFocus);
 public slots:
     void drawTiles(const BoardModel &sourceBoard);
     void resetTiles(const BoardModel &sourceBoard);
-    void onUpdateBoard(const Point &targetPosition, const Point &freePosition, int boardLength);
+    void onUpdateBoard(const Point &freePosition);
     void setFocus(const Point &targetPosition);
 signals:
     void requestMove(const Point &targetPosition, const MoveTileScoreOption &scoreOption);

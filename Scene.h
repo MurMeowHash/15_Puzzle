@@ -35,7 +35,6 @@ public:
     static void clearMessageBox();
     static void raiseMessageBox(const QString &message);
     virtual void freeMainLayout() = 0;
-public slots:
     virtual void initializeScene() = 0;
 };
 

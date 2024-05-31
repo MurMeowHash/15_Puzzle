@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <string>
 #define NODISCARD [[nodiscard]]
+#define UNUSED [[maybe_unused]]
 #define GENERIC_PTR void*
 
 void notifyManagerStarting(const char *manager);

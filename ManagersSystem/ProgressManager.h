@@ -20,7 +20,6 @@ private:
 public:
     void increaseProgress();
     void decreaseProgress();
-    void resetScore();
     void setProgress(int currentProgress);
     void enableSolverUsage(bool usage);
     void startTrackingTime();
@@ -29,7 +28,6 @@ public:
     void setSolvingTime(qint64 targetTime);
     void setBestScore(qint64 targetBestScore);
     void wipeProgress();
-    NODISCARD qint64 getMovesCount() const;
     NODISCARD qint64 getTimeSolving() const;
     NODISCARD qint64 getBestScore() const;
     NODISCARD bool getSolverUsage() const;

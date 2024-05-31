@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
     AbstractController::interconnectControllers(&menuController, &gameController);
     menuController.initializeController(nullptr);
     int execCode = QApplication::exec();
-    SavingsManager::savePreferences();
+    Managers::getSavings()->savePreferences();
     clearResources(menuController, gameController);
     return execCode;
 }

@@ -15,7 +15,7 @@ void GameController::initializeController(const QString &flag) {
     BoardModel *savedBoard{nullptr};
     if(flag == LOAD_STATE_FLAG) {
         try {
-            savedBoard = SavingsManager::getSavedState();
+            savedBoard = Managers::getSavings()->getSavedState();
         } catch(FileException &ex) {
             Scene::raiseMessageBox(ex.what() + QString{" <New game will be started>"});
         }
@@ -51,7 +51,7 @@ void GameController::moveTile(const Point &targetPosition, const MoveTileScoreOp
         if(Managers::getProgress()->increaseMovesCount() == 1) {
             Managers::getProgress()->startTrackingTime();
         }
-        emit updateBoard(targetPosition, initialFreePos, gameBoard->getLength());
+        emit updateBoard(initialFreePos);
     }
 }
 
@@ -167,7 +167,7 @@ void GameController::saveGame() {
         return;
     }
     handleNullReferences("No game to save", 1, gameBoard);
-    SavingsManager::saveState(*gameBoard);
+    Managers::getSavings()->saveState(*gameBoard);
 }
 
 void GameController::dispose() {

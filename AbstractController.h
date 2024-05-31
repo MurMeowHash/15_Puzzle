@@ -1,10 +1,11 @@
 #pragma once
 #include <QObject>
 #include "IDisposable.h"
+#include "IConnectable.h"
 
 class QString;
 
-class AbstractController : public QObject, public IDisposable {
+class AbstractController : public QObject, public IDisposable, public IConnectable {
     Q_OBJECT
 public:
     virtual void initializeController(const QString &flag) = 0;

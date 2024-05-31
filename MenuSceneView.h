@@ -43,6 +43,9 @@ private:
     void setUpDemandView();
     void setUpTimeSolvingView();
     void setUpClosePrefsButton();
+    void setUpPreferencesWindow();
+    void setUpConnections() override;
+    void destroyConnections() override;
 public:
     NODISCARD QPushButton *getPlayButton() const;
     NODISCARD QPushButton *getLoadGameButton() const;
@@ -50,9 +53,6 @@ public:
     NODISCARD QPushButton *getQuitButton() const;
     NODISCARD QComboBox *getResourcesDemandDropDown() const;
     NODISCARD QLineEdit *getTimeSolvingInputLine() const;
-    void setUpPreferencesWindow();
-    void setUpConnections() override;
-    void destroyConnections() override;
     void freeMainLayout() override;
 public slots:
     void showPreferences();

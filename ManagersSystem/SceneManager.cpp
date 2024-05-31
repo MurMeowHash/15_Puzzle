@@ -1,17 +1,19 @@
 #include "SceneManager.h"
 
-SceneManager::SceneManager(QWidget *parent) : QGraphicsView(parent) {
+SceneManager::SceneManager(QWidget *parent) : QGraphicsView(parent), mainLayout{nullptr} {
 
 }
 
 void SceneManager::startUp() {
-    notifyManagerStarting("Scene");
+    notifyManagerStarting("Scene");;
     Scene::setUpApplicationFont();
     menuScene = std::make_shared<MenuSceneView>();
     gameScene = std::make_shared<GameSceneView>();
     activeScene = nullptr;
     setStyleSheet("background-color: #27292E");
     setWindowState(Qt::WindowFullScreen);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     mainLayout = new QVBoxLayout{this};
     Scene::setUpMessageBox();
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <QElapsedTimer>
+#include <list>
 #include "BoardNode.h"
 
 class SolutionModel {

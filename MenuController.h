@@ -5,7 +5,7 @@
 #include "MenuSceneView.h"
 #include "ResourcesOption.h"
 
-class MenuController : public AbstractController, public IConnectable {
+class MenuController : public AbstractController {
     Q_OBJECT
 private:
     std::list<QMetaObject::Connection> *connections{nullptr};

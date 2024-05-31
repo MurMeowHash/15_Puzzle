@@ -1,11 +1,9 @@
-#include <list>
 #include <set>
 #include <QStack>
 #include "BoardNodeComparator.h"
 #include "SolutionModel.h"
 #include "SearchException.h"
 #include "ManagersSystem/Managers.h"
-#include <iostream>
 
 SolutionModel::SolutionModel() : currentStep{0} {
     solutionHead = solutionPath.begin();
@@ -51,6 +49,7 @@ void SolutionModel::fillSolutionPath(BoardNode *lastNode) {
         lastNode->setPathNode();
         lastNode = lastNode->getParent();
     }
+    resetStep();
 }
 
 void SolutionModel::clearNodes(std::set<BoardNode*, BoardNodeComparator> &graph) {

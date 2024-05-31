@@ -8,7 +8,7 @@ Tile::Tile(const QPixmap &pixmap, const Point &currentPosition, BoardView *paren
 
 void Tile::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     if(parent != nullptr) {
-        parent->requestTileMove(position, this);
+        parent->requestTileMove(this);
     }
 }
 
