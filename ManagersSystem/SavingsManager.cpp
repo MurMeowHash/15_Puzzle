@@ -3,13 +3,12 @@
 #include "../FileException.h"
 #include "../GameController.h"
 
-const std::string SavingsManager::SAVINGS_PATH{"./savings/"};
-const std::string SavingsManager::SAVINGS_STATE_PATH{SAVINGS_PATH + "state_data.dat"};
-const std::string SavingsManager::SCORE_DATA_PATH{SAVINGS_PATH + "best_score_data.dat"};
-const std::string SavingsManager::PREFERENCES_PATH{SAVINGS_PATH + "preferences.dat"};
-
 void SavingsManager::startUp() {
     notifyManagerStarting("Savings");
+    savingsPath = "./savings/";
+    savingStatePath = savingsPath + "state_data.dat";
+    scoreDataPath = savingsPath + "best_score_data.dat";
+    preferencesPath = savingsPath + "preferences.dat";
     loadPreferences();
     Managers::getProgress()->setBestScore(readBestScore());
 }
@@ -28,7 +27,7 @@ void SavingsManager::saveState(const BoardModel &targetBoard) {
     FILE *targetStateStream{nullptr};
     std::string errorMessage{"Can not save current state"};
     try {
-        targetStateStream = fopen(SAVINGS_STATE_PATH.data(), "wb");
+        targetStateStream = fopen(savingStatePath.data(), "wb");
         checkOpeningCorruptions(targetStateStream, errorMessage);
         int boardLength = targetBoard.getLength();
         quint64 elementSize = sizeof(targetBoard[0][0]);
@@ -47,7 +46,7 @@ void SavingsManager::saveState(const BoardModel &targetBoard) {
 }
 
 qint64 SavingsManager::readBestScore() {
-    FILE *bestScoreStream = fopen((SCORE_DATA_PATH).data(), "rb");
+    FILE *bestScoreStream = fopen(scoreDataPath.data(), "rb");
     if(bestScoreStream == nullptr) {
         return INT_MAX;
     }
@@ -70,7 +69,7 @@ bool SavingsManager::saveBestScore() {
     std::string errorMessage{"Unable to save best score"};
     FILE *bestScoreStream{nullptr};
     try {
-        bestScoreStream = fopen(SCORE_DATA_PATH.data(), "wb");
+        bestScoreStream = fopen(scoreDataPath.data(), "wb");
         checkOpeningCorruptions(bestScoreStream, errorMessage);
         writeFile(bestScoreStream, &currentScore, sizeof(currentScore), 1, errorMessage);
         fclose(bestScoreStream);
@@ -83,7 +82,7 @@ bool SavingsManager::saveBestScore() {
 }
 
 BoardModel *SavingsManager::getSavedState() {
-    FILE *savedStateStream = fopen(SAVINGS_STATE_PATH.data(), "rb");
+    FILE *savedStateStream = fopen(savingStatePath.data(), "rb");
     std::string errorMessage{"Can not get saved state"};
     checkOpeningCorruptions(savedStateStream, errorMessage);
     QList<QList<int>> retrievedMatrix(GameController::PUZZLE_TABLE_LENGTH);
@@ -101,7 +100,7 @@ BoardModel *SavingsManager::getSavedState() {
 }
 
 bool SavingsManager::savedStateExist() {
-    FILE *savedStateStream = fopen((SAVINGS_STATE_PATH).data(), "rb");
+    FILE *savedStateStream = fopen((savingStatePath).data(), "rb");
     if(savedStateStream == nullptr) {
         return false;
     }
@@ -113,7 +112,7 @@ void SavingsManager::savePreferences() {
     FILE *preferencesStream{nullptr};
     std::string errorMessage{"Unable to save preferences"};
     try {
-        preferencesStream = fopen(PREFERENCES_PATH.data(), "wb");
+        preferencesStream = fopen(preferencesPath.data(), "wb");
         checkOpeningCorruptions(preferencesStream, errorMessage);
         int currentDemandOption = static_cast<int>(Managers::getPreferences()->getResourcesDemand());
         int currentMaxTimeSolving = static_cast<int>(Managers::getPreferences()->getMaxSolutionTimeSec());
@@ -128,7 +127,7 @@ void SavingsManager::savePreferences() {
 }
 
 void SavingsManager::loadPreferences() {
-    FILE *preferencesStream = fopen(PREFERENCES_PATH.data(), "rb");
+    FILE *preferencesStream = fopen(preferencesPath.data(), "rb");
     if(preferencesStream == nullptr) {
         return;
     }
